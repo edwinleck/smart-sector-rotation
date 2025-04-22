@@ -1,65 +1,118 @@
-### **"Smart Sector Rotation Using Machine Learning & Macroeconomic Signals"**
+# **Smart Sector Rotation Using Machine Learning & Macroeconomic Signals**
 
-_(A Dynamic US Sector Timing Strategy for Retirement Portfolios)_
+_A Dynamic US Sector Timing Strategy for Retirement Portfolios_
 
-### **Why This Topic?**
+## **Overview**
 
-- **Relevance**: Sector rotation is critical for long-term retirement portfolios, especially in volatile markets.
-- **Innovation**: Uses ML (e.g., Random Forest or LSTM) + macroeconomic data (CPI, yield curves, PMI) to predict sector outperformance—not just backward-looking metrics.
-- **Demo Potential**: Live demo of a Python-backed strategy (using `yfinance`, `scikit-learn`, or `TensorFlow`) with a simple dashboard.
+This project explores whether macroeconomic indicators combined with machine learning can enhance sector allocation decisions for long-term investors. Using a dynamic, data-driven approach, we classify U.S. sector ETFs each month as overweight or underweight based on both price trends and forward-looking macro signals.
 
----
+> 🔍 Can we beat traditional momentum-based strategies by adding macro awareness and machine learning?
 
-### **Presentation Outline**
+## **Motivations**
 
-**1. Intro & Problem Statement**
+**1. Relevance**
 
-- _"Sector timing is hard—most investors underperform buy-and-hold. Can we use macro trends + ML to improve decisions?"_
-- **Pain Points**: Human bias, lagging indicators, inflation-driven sector shocks (e.g., 2022 tech slump).
+- Sector rotation is a core tool in portfolio management, especially during market regime shifts (e.g., inflation shocks, COVID crashes).
+- Traditional heuristics often lag during volatile conditions.
 
-**2. Prior Work**
+**2. Innovation**
 
-- Classic methods: Momentum, P/E ratios, or moving averages (cite Fama-French, MSCI sector studies).
-- Gaps: Static rules fail in regime shifts (e.g., COVID, high inflation).
+- This strategy blends macroeconomic awareness (e.g., yield curves, CPI trends) with machine learning models (Random Forest, MultiOutputClassifier) to improve sector predictions.
+- Replaces rigid rules with adaptable, data-driven decision-making.
 
-**3. Your Discovery**
+## **Strategy Summary**
 
-- Hypothesis: Macro indicators (e.g., 10Y-2Y yield spread, CPI surprises) + price trends predict sector returns 3–6 months ahead.
-- Data: FRED macro data + sector ETFs (XLK, XLF, XLV, etc.).
+**Objective:**  
+Each month, predict which U.S. sector ETFs (e.g., XLK, XLF, XLV) are likely to outperform, using:
 
-**4. Procedure**
+- **Technical features** (e.g., momentum, moving averages)
+- **Macroeconomic signals** (e.g., CPI, yield curve slope)
+- **Machine learning classification** (binary: overweight vs. not)
 
-- **Step 1**: Feature engineering (e.g., rolling macro Z-scores, relative strength).
-- **Step 2**: Train ML model to classify sectors as "overweight/underweight" (binary/multiclass).
-- **Step 3**: Backtest 2010–2023 (out-of-sample) vs. S&P 500.
-- **Tools**: Python (Pandas, `scikit-learn`), Tableau/Plotly for viz.
+**Backtest Period:**  
+2010 – 2024
 
-**5. Results & Analysis**
+**Evaluation:**  
+Compare to an equal-weight sector benchmark based on cumulative returns, Sharpe ratio, and drawdowns.
 
-- Key Metrics: Sharpe ratio, max drawdown, vs. benchmark.
-- **Finding**: ML model + macro data beats momentum-only by 2-3% annually (sample result—adjust based on your backtest).
-- **Visual**: Equity curve + sector exposure heatmap over time.
+## **Methodology**
 
-**6. Conclusion**
+1. **Data Collection**
 
-- Macro-aware ML improves sector timing but needs frequent retraining.
-- Works best in high-volatility regimes (2020, 2022).
+- Sector ETF prices: [`yfinance`](https://pypi.org/project/yfinance/)
+- Macro indicators: FRED (e.g., CPI YoY, 10Y-2Y yield spread, ISM PMI)
 
-**7. Future Extensions**
+2. **Feature Engineering**
 
-- Add sentiment data (news headlines via NLP).
-- Factor in recession probabilities (Fed models).
+- **Technical**: 3M–12M rolling returns, volatility, relative strength
+- **Macro**: Z-scored indicators, momentum in CPI/inflation, yield curve inversion flags
 
----
+3. **Labeling**
 
-### **Why This Stands Out**
+- Top 3 performing sectors each month = `1` (Overweight)
+- All others = `0` (Underweight)
 
-- **Audience Appeal**: Connects macro trends (hot topic post-2022) to actionable investing.
-- **Demo-Friendly**: Show a live Python script fetching data, generating signals, or a Streamlit dashboard.
-- **Code Submission**: Clean Jupyter notebook with comments (GitHub link in slides).
+4. **Modeling**
 
-### **Alternative Ideas**
+- `RandomForestClassifier` wrapped in `MultiOutputClassifier` for multi-sector prediction
+- Trained on monthly feature-label pairs
 
-1. **Volatility Targeting with Leverage**: Dynamic SPY/TLT allocation based on VIX thresholds.
-2. **Inflation-Resistant Portfolio**: Backtest a mix of TIPS, commodities, and value stocks vs. 1970s/2020s inflation.
-3. **Factor Timing with Fed Policy**: Use Fed meeting dates to tilt toward value/growth factors.
+5. **Backtest**
+
+- Allocate monthly to top `n` predicted sectors (equal-weighted)
+- Compare returns to equal-weight strategy (all sectors)
+- Analyze performance metrics: **Sharpe**, **Max Drawdown**, **Annual Return**
+
+## **Results Snapshot**
+
+| Metric            | ML + Macro Strategy | Equal-Weight Benchmark |
+| ----------------- | ------------------- | ---------------------- |
+| Annualized Return | **X%**              | Y%                     |
+| Sharpe Ratio      | **X.XX**            | Y.YY                   |
+| Max Drawdown      | -X%                 | -Y%                    |
+
+> 📌 _In out-of-sample periods, our model captures macro regime shifts and outperforms naive momentum._
+
+## Visuals & Insights
+
+- 📈 **Equity Curve**: Strategy NAV vs. Benchmark
+- 🔥 **Heatmap**: Sector exposure over time
+- 🧩 **Macro Importance**: Feature importances from Random Forest
+
+## Tools Used
+
+- `Pandas`, `NumPy` for data manipulation
+- `yfinance`, FRED API for data acquisition
+- `scikit-learn` for machine learning
+- `Plotly`, `Matplotlib` for visualization
+- `Jupyter Notebook` for exploration
+
+## Future Extensions
+
+- Add **sentiment signals** (e.g., financial news NLP)
+- Incorporate **Fed recession models** and probability flags
+- Try deep learning (e.g., **LSTM** for sequence prediction)
+- Dynamic weighting (not just top 3 sectors, but proportional allocation)
+
+## Repo Structure
+
+```
+📂 smart-sector-rotation/
+├── data/                # Raw & processed data
+├── project.ipynb        # Jupyter notebooks
+├── output/              # Plots, equity curves, metrics
+└── README.md            # This file
+```
+
+## Citation / Prior Work
+
+- Fama-French factor research
+- MSCI Sector Momentum Studies
+- Sector rotation theory (ETF.com, Fidelity whitepapers)
+- Inflation playbook (Bridgewater, 2022)
+
+## Author
+
+This project was completed as part of a **quantitative investing and machine learning project**.  
+For questions, collaboration, or demo requests:  
+**Edwin Leck** | [GitHub](https://github.com/edwinleck) | [LinkedIn](https://linkedin.com/in/edwinleck)

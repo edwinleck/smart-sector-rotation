@@ -59,7 +59,7 @@ Compare to an equal-weight sector benchmark based on cumulative returns, Sharpe 
 
 5. **Backtest**
 
-- Allocate monthly to top `n` predicted sectors (equal-weighted)
+- Allocate monthly to top `3` predicted sectors (equal-weighted)
 - Compare returns to equal-weight strategy (all sectors)
 - Analyze performance metrics: **Sharpe**, **Max Drawdown**, **Annual Return**
 
@@ -76,7 +76,7 @@ Compare to an equal-weight sector benchmark based on cumulative returns, Sharpe 
 ### **Performance Tradeoffs**
 
 - The strategy underperformed the benchmark in returns but achieved **lower volatility** (Sharpe Ratio closer to 1.0 is still strong).
-- The benchmark's higher Sharpe suggests better risk-adjusted returns, but your strategy's **macro integration** shows promise for regime shifts.
+- The benchmark's higher Sharpe suggests better risk-adjusted returns, but my strategy's **macro integration** shows promise for regime shifts.
 
 ### **Feature Importance**
 

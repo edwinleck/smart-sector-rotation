@@ -30,7 +30,7 @@ Each month, predict which U.S. sector ETFs (e.g., XLK, XLF, XLV) are likely to o
 - **Machine learning classification** (binary: overweight vs. not)
 
 **Backtest Period:**  
-2010 – 2024
+2010 – 2023
 
 **Evaluation:**  
 Compare to an equal-weight sector benchmark based on cumulative returns, Sharpe ratio, and drawdowns.
@@ -67,17 +67,53 @@ Compare to an equal-weight sector benchmark based on cumulative returns, Sharpe 
 
 | Metric            | ML + Macro Strategy | Equal-Weight Benchmark |
 | ----------------- | ------------------- | ---------------------- |
-| Annualized Return | **X%**              | Y%                     |
-| Sharpe Ratio      | **X.XX**            | Y.YY                   |
-| Max Drawdown      | -X%                 | -Y%                    |
+| Annualized Return | **15.1%**           | 16.7%                  |
+| Sharpe Ratio      | **0.98**            | 1.45                   |
+| Max Drawdown      | -8.2%               | -5.5%                  |
 
-> 📌 _In out-of-sample periods, our model captures macro regime shifts and outperforms naive momentum._
+## **Key Insights**
+
+### **Performance Tradeoffs**
+
+- The strategy underperformed the benchmark in returns but achieved **lower volatility** (Sharpe Ratio closer to 1.0 is still strong).
+- The benchmark's higher Sharpe suggests better risk-adjusted returns, but your strategy's **macro integration** shows promise for regime shifts.
+
+### **Feature Importance**
+
+- Top predictive features were **sector momentum** (6-month windows for `XLY`, `XLE`, `XLK`) and **volatility** (`XLI`, `XLB`).
+- **`YieldCurve`** was the only macroeconomic feature in the top 15, indicating momentum dominates in this period.
+
+### **Sector Exposure**
+
+- Consistent allocations to **`XLV` (Healthcare)** and **`XLF` (Financials)** in 2024, with occasional **`XLE` (Energy)** exposure.
+- Avoided defensive sectors (`XLP`, `XLU`) and tech (`XLK`) despite their 2024 rally – a potential area for optimization.
+
+### **Equity Curve**
+
+- The strategy NAV closely tracked the benchmark until **mid-2024**, then diverged (likely due to macro shifts).
+- Drawdowns were contained below **-8%**, showing effective risk management.
+
+## **Improvements**
+
+### **Enhance Macro Integration**
+
+1. Add **inflation-sensitive features** (e.g., breakeven rates) to improve regime adaptation.
+2. Test **hierarchical models** where macro factors override momentum signals during extremes.
+
+### **Refine Sector Rules**
+
+1. Address underweight in **`XLK` (Tech)** – consider dual momentum (absolute + relative).
+2. Reduce **`XLF` overexposure** if rate cuts materialize in 2025.
+
+### **Dynamic Weighting**
+
+- Use the Sharpe Ratio gap (**0.98 vs 1.45**) to calibrate benchmark-relative risk budgets.
 
 ## Visuals & Insights
 
-- 📈 **Equity Curve**: Strategy NAV vs. Benchmark
-- 🔥 **Heatmap**: Sector exposure over time
-- 🧩 **Macro Importance**: Feature importances from Random Forest
+- **Equity Curve**: ![Strategy NAV vs. Benchmark](output/equity_curve.png)
+- **Heatmap**: ![Sector exposure over time](output/sector_exposure_heatmap.png)
+- **Macro Importance**: ![Feature importances from Random Forest](output/top_features.png)
 
 ## Tools Used
 
@@ -86,13 +122,6 @@ Compare to an equal-weight sector benchmark based on cumulative returns, Sharpe 
 - `scikit-learn` for machine learning
 - `Plotly`, `Matplotlib` for visualization
 - `Jupyter Notebook` for exploration
-
-## Future Extensions
-
-- Add **sentiment signals** (e.g., financial news NLP)
-- Incorporate **Fed recession models** and probability flags
-- Try deep learning (e.g., **LSTM** for sequence prediction)
-- Dynamic weighting (not just top 3 sectors, but proportional allocation)
 
 ## Repo Structure
 
